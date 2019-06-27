@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
+using FlyLang.Parser;
 
-namespace FlyLang.Interpreter
+namespace FlyLang.Interpreter.Nodes
 {
     public class Expression : Node
     {
@@ -50,6 +50,8 @@ namespace FlyLang.Interpreter
                         return leftValue <= rightValue;
                     case ">=":
                         return leftValue >= rightValue;
+                    case "!=":
+                        return leftValue != rightValue;
                     case ">":
                         return leftValue > rightValue;
                     case "<":
@@ -62,6 +64,8 @@ namespace FlyLang.Interpreter
             {
                 if (Operator == "+")
                     return leftValue + rightValue;
+                else if (Operator == "==")
+                    return leftValue == rightValue;
             }
             throw new Exception();
         }

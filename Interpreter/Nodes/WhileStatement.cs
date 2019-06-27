@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlyLang.Interpreter
+﻿namespace FlyLang.Interpreter.Nodes
 {
     public class WhileStatement : Node
     {

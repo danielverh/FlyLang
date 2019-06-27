@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlyLang.Interpreter
+﻿namespace FlyLang.Interpreter.Nodes
 {
     public class Assignment : Node
     {
@@ -16,7 +12,7 @@ namespace FlyLang.Interpreter
         public override dynamic Invoke()
         {
             var value = Expression.Invoke(Parent);
-            Interpreter.ActionTree.Variables[Name] = value;
+            ActionTree.Variables[Name] = value;
             return value;
         }
     }

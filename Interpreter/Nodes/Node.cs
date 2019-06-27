@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 
-namespace FlyLang.Interpreter
+namespace FlyLang.Interpreter.Nodes
 {
     public abstract class Node
     {
-        public Node()
+        protected Node()
         {
             Nodes = new List<Node>();
         }
-        public Node(params Node[] nodes)
+
+        protected Node(params Node[] nodes)
         {
             Nodes = new List<Node>(nodes);
         }
@@ -20,11 +21,11 @@ namespace FlyLang.Interpreter
         public void Add(Node n) => Nodes.Add(n);
         public dynamic GetValue(string name)
         {
-            if (Parent != null && Parent is ActionNode)
+            if (Parent is ActionNode node)
             {
-                var a = (Parent as ActionNode);
+                var a = node;
                 if (a.Arguments.ContainsKey(name))
-                    return a.Arguments[name].Invoke(Parent);
+                    return a.Arguments[name].Invoke(node);
             }
             if (ActionTree.Variables.ContainsKey(name))
                 return ActionTree.Variables[name];

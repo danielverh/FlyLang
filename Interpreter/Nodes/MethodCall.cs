@@ -1,10 +1,8 @@
-﻿using FlyLang.Libraries;
-using System;
+﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
+using FlyLang.Libraries;
 
-namespace FlyLang.Interpreter
+namespace FlyLang.Interpreter.Nodes
 {
     public class MethodCall : Node
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlyLang.Interpreter
+﻿namespace FlyLang.Interpreter.Nodes
 {
     public class IfStatement : Node
     {
@@ -21,20 +17,18 @@ namespace FlyLang.Interpreter
         {
             if (Expression.Invoke() == true)
             {
-                Action.Invoke(Parent);
-                return null;
+                return Action.Invoke(Parent);
             }
             if (ElifExpressions != null)
                 for (int i = 0; i < ElifExpressions.Length; i++)
                 {
                     if (ElifExpressions[i].Invoke() == true)
                     {
-                        ElifActions[i].Invoke();
-                        return null;
+                        return ElifActions[i].Invoke();
                     }
                 }
             if (ElseAction != null)
-                ElseAction.Invoke();
+                return ElseAction.Invoke();
             return null;
         }
     }

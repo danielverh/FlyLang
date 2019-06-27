@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace FlyLang.Interpreter
+namespace FlyLang.Interpreter.Nodes
 {
     public class ActionNode : Node
     {
@@ -25,17 +24,28 @@ namespace FlyLang.Interpreter
         }
         public override dynamic Invoke()
         {
+            if (Parent is ActionNode node)
+                foreach (var arg in node.Arguments)
+                {
+                    Arguments[arg.Key] = arg.Value;
+                }
+
+            object rr = null;
             foreach (var item in Nodes)
             {
-                var result = item.Invoke(this);
                 // Implement return here
-                if (item is Return)
+                if (item is Return ret)
                 {
-                    var r = (item as Return).Expression.Invoke(this);
-                    return r;
+                    rr = ret.Invoke();
                 }
+                var result = item.Invoke(this);
+                if (result is Return r)
+                {
+                    rr = r.Invoke();
+                }
+
             }
-            return null;
+            return rr;
         }
     }
 }

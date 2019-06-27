@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FlyLang.Libraries
 {
-    [FlyLibrary("Base")]
+    [FlyLibrary("base")]
     public class Base
     {
         [PublicMethod("print")]
@@ -18,6 +18,28 @@ namespace FlyLang.Libraries
         public static string Input(object[] args)
         {
             return Console.ReadLine();
+        }
+        [PublicMethod("first")]
+        public static string First(object[] args)
+        {
+            return ((string) args[0])[0].ToString();
+        }
+
+        [PublicMethod("at")]
+        public static string At(object[] args)
+        {
+            return ((string)args[0])[(int)args[1]].ToString();
+        }
+        [PublicMethod("len")]
+        public static int Length(object[] args)
+        {
+            return ((string)args[0]).Length;
+        }
+        [PublicMethod("intToAscii")]
+        public static string Ascii(object[] args)
+        {
+            var i = (int) args[0];
+            return Encoding.ASCII.GetString(new byte[] {(byte) i});
         }
         [PublicMethod("sqrt")]
         public static float Sqrt(object[] args) => (float)Math.Sqrt(Convert.ToSingle(args[0]));

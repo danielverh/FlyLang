@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Antlr4.Runtime.Misc;
 using FlyLang.Interpreter;
+using FlyLang.Interpreter.Nodes;
 using FlyLang.Parser;
 
 namespace FlyLang
@@ -94,7 +95,9 @@ namespace FlyLang
         }
         public override Node VisitUse([NotNull] FlyLangParser.UseContext context)
         {
-            return new UseStatement(context.ID().GetText());
+            var use = new UseStatement(context.ID().GetText());
+            ActionTree.UseStatements.Add(use);
+            return use;
         }
         public override Node VisitWhile([NotNull] FlyLangParser.WhileContext context)
         {
