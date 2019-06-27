@@ -13,6 +13,7 @@ namespace FlyLang.Interpreter
 {
     public class InterpreterBase
     {
+        public const bool Debug = true;
         public void RunFile(string file)
         {
             Run(new AntlrFileStream(file));
@@ -32,6 +33,9 @@ namespace FlyLang.Interpreter
             var parser = new Parser.FlyLangParser(new CommonTokenStream(tokenizer));
             var visitor = new Visitor();
             visitor.Visit(parser.program());
+            if(Debug)
+                visitor.Tree.Visualize();
+            Console.ReadLine();
             // Load libraries
             var loader = new Loader(visitor.Tree.Nodes.Where(x => x is UseStatement).Select(x => x as UseStatement).ToArray());
             // Run the program

@@ -29,5 +29,16 @@ namespace FlyLang.Interpreter.Nodes
                 return ActionTree.Actions[Name].Invoke(Arguments);
             throw new Exception("Method not found.");
         }
+
+        public override void Visualize(Node[] nodes = null, int level = 0, string label = "")
+        {
+            base.Visualize(nodes, level, Name + (Arguments.Length > 0 ? " (args:)" : ""));
+            for (var index = 0; index < Arguments.Length; index++)
+            {
+                var argument = Arguments[index];
+
+                base.Visualize(new Node[] { argument }, level + 1, "arg" + index);
+            }
+        }
     }
 }

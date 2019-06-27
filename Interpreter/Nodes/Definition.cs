@@ -5,14 +5,17 @@
         public Definition(string name, ActionNode action)
         {
             Name = name;
-            ActionNode = action;
+            Add(action);
         }
-        public ActionNode ActionNode { get; }
+
+        public ActionNode ActionNode => Nodes[0] as ActionNode;
         public string Name { get; }
         public override dynamic Invoke()
         {
             ActionTree.Actions.Add(Name, ActionNode);
             return null;
         }
+
+        
     }
 }

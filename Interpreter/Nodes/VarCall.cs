@@ -11,5 +11,10 @@
         {
             return GetValue(Name);
         }
+
+        public override void Visualize(Node[] nodes = null, int level = 0, string label = "")
+        {
+            base.Visualize(nodes, level, Name);
+        }
     }
 }

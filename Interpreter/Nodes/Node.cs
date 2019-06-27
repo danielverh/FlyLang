@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FlyLang.Interpreter.Nodes
 {
@@ -38,5 +39,18 @@ namespace FlyLang.Interpreter.Nodes
         }
         public abstract dynamic Invoke();
         public T Invoke<T>() => (T)Invoke();
+
+        public virtual void Visualize(Node[] nodes = null, int level = 0, string label = "")
+        {
+            nodes = nodes ?? Nodes.ToArray();
+            Console.Write(string.Concat(Enumerable.Repeat(" - ", level)));
+            Console.Write(GetType().Name + (label == string.Empty ? "" : ": " + label));
+            Console.Write("\n");
+            if (HasChildren)
+                foreach (var node in nodes)
+                {
+                    node?.Visualize(level: level + 1);
+                }
+        }
     }
 }

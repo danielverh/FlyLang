@@ -4,11 +4,12 @@
     {
         public WhileStatement(Node expression, Node action)
         {
-            Expression = expression;
-            Action = action;
+            Add(expression);
+            Add(action);
         }
-        public Node Expression { get; }
-        public Node Action { get; }
+
+        public Node Expression => Nodes[0];
+        public Node Action => Nodes[1];
         public override dynamic Invoke()
         {
             while (Expression.Invoke(Parent) == true)

@@ -4,11 +4,12 @@
     {
         public IfStatement(Node expression, Node action)
         {
-            Expression = expression;
-            Action = action;
+            Add(expression);
+            Add(action);
         }
-        public Node Expression { get; }
-        public Node Action { get; }
+
+        public Node Expression => Nodes[0];
+        public Node Action => Nodes[1];
         public Node[] ElifExpressions { get; set; }
         public Node[] ElifActions { get; set; }
         public Node ElseAction { get; set; }
@@ -30,6 +31,16 @@
             if (ElseAction != null)
                 return ElseAction.Invoke();
             return null;
+        }
+
+        public override void Visualize(Node[] nodes = null, int level = 0, string label = "")
+        {
+            base.Visualize(null, level, "IF");
+            for (int i = 0; i < ElifActions.Length; i++)
+            {
+                base.Visualize(new Node[] { ElifExpressions[i], ElifActions[i]}, level + 1, "ELIF");
+            }
+            base.Visualize(new Node[]{ElseAction}, level + 1, "ELSE");
         }
     }
 }
