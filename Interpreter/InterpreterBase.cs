@@ -35,7 +35,6 @@ namespace FlyLang.Interpreter
             visitor.Visit(parser.program());
             if(Debug)
                 visitor.Tree.Visualize();
-            Console.ReadLine();
             // Load libraries
             var loader = new Loader(visitor.Tree.Nodes.Where(x => x is UseStatement).Select(x => x as UseStatement).ToArray());
             // Run the program

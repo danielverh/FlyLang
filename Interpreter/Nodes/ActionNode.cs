@@ -11,6 +11,12 @@ namespace FlyLang.Interpreter.Nodes
         {
             AddRange(items);
         }
+
+        public dynamic Invoke(Node parent, Node[] args)
+        {
+            Parent = parent;
+            return Invoke(args);
+        }
         public dynamic Invoke(Node[] args)
         {
             if (ArgNames.Length != args.Length)
@@ -30,22 +36,22 @@ namespace FlyLang.Interpreter.Nodes
                     Arguments[arg.Key] = arg.Value;
                 }
 
-            object rr = null;
             foreach (var item in Nodes)
             {
                 // Implement return here
-                if (item is Return ret)
+                if (item is Return r)
                 {
-                    rr = ret.Invoke();
+                    return r;
+                    continue;
                 }
                 var result = item.Invoke(this);
-                if (result is Return r)
+                if (result is Return r2)
                 {
-                    rr = r.Invoke();
+                    return r2;
                 }
 
             }
-            return rr;
+            return null;
         }
     }
 }

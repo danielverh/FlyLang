@@ -26,7 +26,7 @@ namespace FlyLang.Interpreter.Nodes
             }
             // Look in local:
             if (ActionTree.Actions.ContainsKey(Name))
-                return ActionTree.Actions[Name].Invoke(Arguments);
+                return ActionTree.Actions[Name].Invoke(Parent, Arguments);
             throw new Exception("Method not found.");
         }
 

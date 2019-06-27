@@ -16,20 +16,20 @@
 
         public override dynamic Invoke()
         {
-            if (Expression.Invoke() == true)
+            if (Expression.Invoke(Parent) == true)
             {
                 return Action.Invoke(Parent);
             }
             if (ElifExpressions != null)
                 for (int i = 0; i < ElifExpressions.Length; i++)
                 {
-                    if (ElifExpressions[i].Invoke() == true)
+                    if (ElifExpressions[i].Invoke(Parent) == true)
                     {
-                        return ElifActions[i].Invoke();
+                        return ElifActions[i].Invoke(Parent);
                     }
                 }
             if (ElseAction != null)
-                return ElseAction.Invoke();
+                return ElseAction.Invoke(Parent);
             return null;
         }
 
