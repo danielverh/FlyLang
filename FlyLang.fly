@@ -1,0 +1,35 @@
+use base;
+
+// Define a method called 'echo'
+echo () => {
+	print(input());
+	return true;
+};
+calc (x,y) => {
+	return x + y;
+};
+// Variables and boolean statements:
+x = 1;
+y = 2;
+z = x + y;
+if: z == (x + y) => {
+	print(z, " equals ", x, "+", y);
+}
+elif: z == x => {
+	print(z, " equals ", x);
+}
+else: => {
+	print("Something else...");
+}
+
+// Basic loops:
+i = 0;
+while: i < 10000 => {
+	sqrt(i);
+	i = i + 1;
+}
+// Run the user defined method.
+echo();
+print(calc(10, 20));
+// Read a line.
+input();
