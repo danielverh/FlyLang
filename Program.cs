@@ -15,8 +15,8 @@ namespace FlyLang
         static void Main(string[] args)
         {
             var repl = new Repl();
-//            repl.Start(args);
-            repl.Start(new string[]{"-f" + @"C:\Users\danie\Documents\Projecten\FlyLang\FlyLang.fly" });
+            repl.Start(args);
+            //repl.Start(new string[]{"-f" + @"C:\Users\danie\Documents\Projecten\FlyLang\FlyLang.fly" });
 
         }
     }

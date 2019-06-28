@@ -14,6 +14,8 @@ namespace FlyLang
         {
             [Option('f', "srcFile", Required = false, HelpText = ".fly source input file")]
             public string SourceFile { get; set; }
+            [Option('w')]
+            public bool WaitAfter { get; set; }
             [Option('v', "verbose", Required = false, HelpText = "Output extra information")]
             public bool Verbose { get; set; }
         }
@@ -24,7 +26,7 @@ namespace FlyLang
                 {
                     if (o.SourceFile != null)
                     {
-                        RunFile(o.SourceFile);
+                        RunFile(o.SourceFile.Trim());
                     }
                     else
                     {
@@ -45,12 +47,15 @@ namespace FlyLang
                                     break;
                             }
                         }
+                        if (o.WaitAfter)
+                            Console.ReadLine();
                     }
                 });
 
             void RunFile(string o, bool verbose = false)
             {
-                if(!File.Exists(o))
+
+                if (!File.Exists(o))
                     throw new FileNotFoundException(".fly file not found...", o);
                 var b = new Interpreter.InterpreterBase();
                 if (!verbose)
@@ -64,14 +69,16 @@ namespace FlyLang
                         Console.WriteLine($"----------");
                         stopwatch.Start();
                     };
-                    b.InterpretingStopped += (sender, eventArgs) => { stopwatch.Stop();
+                    b.InterpretingStopped += (sender, eventArgs) =>
+                    {
+                        stopwatch.Stop();
                         Console.WriteLine("----------");
                         Console.WriteLine("Done interpreting");
                         Console.WriteLine($"Interpreting took: {stopwatch.ElapsedMilliseconds}ms");
                     };
                 }
                 b.RunFile(o);
-                
+
             }
         }
 
