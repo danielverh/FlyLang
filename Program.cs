@@ -16,7 +16,7 @@ namespace FlyLang
         {
             var repl = new Repl();
 //            repl.Start(args);
-            repl.Start(new string[]{"-f" + @"C:\Users\danie\Downloads\test2.fly" });
+            repl.Start(new string[]{"-f" + @"C:\Users\danie\Documents\Projecten\FlyLang\FlyLang.fly" });
 
         }
     }

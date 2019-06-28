@@ -13,7 +13,7 @@ namespace FlyLang.Interpreter
 {
     public class InterpreterBase
     {
-        public const bool Debug = true;
+        public const bool Debug = false;
         public void RunFile(string file)
         {
             Run(new AntlrFileStream(file));

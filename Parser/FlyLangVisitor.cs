@@ -51,11 +51,11 @@ public interface IFlyLangVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAssignment([NotNull] FlyLangParser.AssignmentContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.return"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.returnStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitReturn([NotNull] FlyLangParser.ReturnContext context);
+	Result VisitReturnStmt([NotNull] FlyLangParser.ReturnStmtContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="FlyLangParser.use"/>.
 	/// </summary>
@@ -69,29 +69,41 @@ public interface IFlyLangVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitDefinition([NotNull] FlyLangParser.DefinitionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.if"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.classDef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitIf([NotNull] FlyLangParser.IfContext context);
+	Result VisitClassDef([NotNull] FlyLangParser.ClassDefContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.elif"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.ifStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitElif([NotNull] FlyLangParser.ElifContext context);
+	Result VisitIfStmt([NotNull] FlyLangParser.IfStmtContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.else"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.elifStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitElse([NotNull] FlyLangParser.ElseContext context);
+	Result VisitElifStmt([NotNull] FlyLangParser.ElifStmtContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.while"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.elseStmt"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitWhile([NotNull] FlyLangParser.WhileContext context);
+	Result VisitElseStmt([NotNull] FlyLangParser.ElseStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.whileStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitWhileStmt([NotNull] FlyLangParser.WhileStmtContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.forStmt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForStmt([NotNull] FlyLangParser.ForStmtContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="FlyLangParser.boolean"/>.
 	/// </summary>
@@ -117,6 +129,12 @@ public interface IFlyLangVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAction([NotNull] FlyLangParser.ActionContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.newClass"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNewClass([NotNull] FlyLangParser.NewClassContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="FlyLangParser.varCall"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -135,17 +153,41 @@ public interface IFlyLangVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitString([NotNull] FlyLangParser.StringContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.int"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.intLit"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitInt([NotNull] FlyLangParser.IntContext context);
+	Result VisitIntLit([NotNull] FlyLangParser.IntLitContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="FlyLangParser.float"/>.
+	/// Visit a parse tree produced by <see cref="FlyLangParser.floatLit"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFloat([NotNull] FlyLangParser.FloatContext context);
+	Result VisitFloatLit([NotNull] FlyLangParser.FloatLitContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLiteral([NotNull] FlyLangParser.LiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.array"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArray([NotNull] FlyLangParser.ArrayContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.dictionary"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDictionary([NotNull] FlyLangParser.DictionaryContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="FlyLangParser.keyItem"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitKeyItem([NotNull] FlyLangParser.KeyItemContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="FlyLangParser.id"/>.
 	/// </summary>

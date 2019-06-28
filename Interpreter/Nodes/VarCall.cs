@@ -17,4 +17,20 @@
             base.Visualize(nodes, level, Name);
         }
     }
+    public class ArrayVarCall : Node
+    {
+        public string Name { get; }
+        public Node Position { get; }
+        public ArrayVarCall(string name, Node pos)
+        {
+            Name = name;
+            Position = pos;
+        }
+
+        public override dynamic Invoke()
+        {
+            var p = Position.Invoke();
+            return GetValue(Name)[p];
+        }
+    }
 }

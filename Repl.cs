@@ -53,7 +53,7 @@ namespace FlyLang
                 if(!File.Exists(o))
                     throw new FileNotFoundException(".fly file not found...", o);
                 var b = new Interpreter.InterpreterBase();
-                if (verbose)
+                if (!verbose)
                 {
                     var stopwatch = new Stopwatch();
                     b.InterpretingStarted += (sender, e) =>

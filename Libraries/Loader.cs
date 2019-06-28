@@ -12,6 +12,7 @@ namespace FlyLang.Libraries
         public static Dictionary<string, Dictionary<string, Func<object[], dynamic>>> Libraries =
             new Dictionary<string, Dictionary<string, Func<object[], dynamic>>>();
         public static string[] LibraryNames;
+        public static object Self { get; set; } = null;
         public Loader(UseStatement[] usings)
         {
             string[] usable = usings.SelectMany(x => x.Names).Distinct().ToArray();

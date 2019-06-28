@@ -30,17 +30,29 @@ namespace FlyLang
                 return Visit(context.assignment());
             if (context.definition() != null)
                 return Visit(context.definition());
+            if (context.classDef() != null)
+                return Visit(context.classDef());
             if (context.methodCall() != null)
                 return Visit(context.methodCall());
             if (context.use() != null)
                 return Visit(context.use());
-            if (context.@if() != null)
-                return Visit(context.@if());
-            if (context.@while() != null)
-                return Visit(context.@while());
-            if (context.@return() != null)
-                return Visit(context.@return());
+            if (context.ifStmt() != null)
+                return Visit(context.ifStmt());
+            if (context.whileStmt() != null)
+                return Visit(context.whileStmt());
+            if (context.returnStmt() != null)
+                return Visit(context.returnStmt());
             return base.VisitStatement(context);
+        }
+        public override Node VisitClassDef([NotNull] FlyLangParser.ClassDefContext context)
+        {
+            var assignments = new List<Node>();
+            var defs = new List<Node>();
+            foreach (var item in context.assignment())
+                assignments.Add(Visit(item));
+            foreach (var item in context.definition())
+                defs.Add(Visit(item));
+            return new ClassDefNode(context.ID().GetText(), defs.ToArray(), assignments.ToArray());
         }
         public override Node VisitExpression([NotNull] FlyLangParser.ExpressionContext context)
         {
@@ -53,16 +65,22 @@ namespace FlyLang
                 return Visit(context.methodCall());
             if (context.varCall() != null)
                 return Visit(context.varCall());
-            if (context.@int() != null || context.@string() != null || context.@float() != null)
+            if (context.intLit() != null || context.@string() != null || context.floatLit() != null)
                 return base.VisitExpression(context);
             if (context.boolean() != null)
                 return new Literal(context.boolean().GetText() == "true");
             if (context.PRL() != null && context.PRR() != null && context.expression() != null)
                 return Visit(context.expression(0));
+            if (context.array() != null)
+                return Visit(context.array());
+            if (context.dictionary() != null)
+                return Visit(context.dictionary());
             throw new Exception();
         }
         public override Node VisitVarCall([NotNull] FlyLangParser.VarCallContext context)
         {
+            if (context.SBL() != null)
+                return new ArrayVarCall(context.ID().GetText(), Visit(context.expression()));
             return new VarCall(context.ID().GetText());
         }
         public override Node VisitDefinition([NotNull] FlyLangParser.DefinitionContext context)
@@ -80,7 +98,20 @@ namespace FlyLang
         }
         public override Node VisitAssignment([NotNull] FlyLangParser.AssignmentContext context)
         {
-            return new Assignment(context.ID().GetText(), Visit(context.expression()));
+            if(context.SBL() != null)
+            {
+                return new ArrayAssignment(context.ID().GetText(), 
+                    Visit(context.expression(0)), Visit(context.expression(1)));
+            }
+            if (context.ADD().Length == 2)
+                return new Assignment(context.ID().GetText(),
+                    new Expression(new VarCall(context.ID().GetText()),
+                    new Literal(1), "+"));
+            if (context.SUB().Length == 2)
+                return new Assignment(context.ID().GetText(),
+                    new Expression(new VarCall(context.ID().GetText()),
+                    new Literal(1), "-"));
+            return new Assignment(context.ID().GetText(), Visit(context.expression(0)));
         }
 
         public override Node VisitMethodCall([NotNull] FlyLangParser.MethodCallContext context)
@@ -91,32 +122,40 @@ namespace FlyLang
                 {
                     args.Add(Visit(expr));
                 }
-            return new MethodCall(context.ID().GetText(), args.ToArray());
+            if(context.id().ID().Length > 1)
+            {
+                var ids = context.id().ID();
+                Node target = null;
+                if (ids.Length == 2)
+                    target = new VarCall(ids[0].GetText());
+                return new MethodCall(ids.Last().GetText(), args.ToArray(), target);
+            }
+            return new MethodCall(context.id().GetText(), args.ToArray());
         }
         public override Node VisitUse([NotNull] FlyLangParser.UseContext context)
         {
-            var use = new UseStatement(context.ID().GetText());
+            var use = new UseStatement(context.id().GetText());
             ActionTree.UseStatements.Add(use);
             return use;
         }
-        public override Node VisitWhile([NotNull] FlyLangParser.WhileContext context)
+        public override Node VisitWhileStmt([NotNull] FlyLangParser.WhileStmtContext context)
         {
             return new WhileStatement(Visit(context.expression()), Visit(context.action()));
         }
-        public override Node VisitReturn([NotNull] FlyLangParser.ReturnContext context)
+        public override Node VisitReturnStmt([NotNull] FlyLangParser.ReturnStmtContext context)
         {
             return new Return(Visit(context.expression()));
         }
-        public override Node VisitIf([NotNull] FlyLangParser.IfContext context)
+        public override Node VisitIfStmt([NotNull] FlyLangParser.IfStmtContext context)
         {
             var statement = new IfStatement(Visit(context.expression()), Visit(context.action()));
 
-            if(context.elif() != null)
+            if (context.elifStmt() != null)
             {
                 var expr = new List<Node>();
                 var actions = new List<Node>();
-                var elifs = context.elif();
-                foreach(var e in elifs)
+                var elifs = context.elifStmt();
+                foreach (var e in elifs)
                 {
                     expr.Add(Visit(e.expression()));
                     actions.Add(Visit(e.action()));
@@ -124,20 +163,20 @@ namespace FlyLang
                 statement.ElifActions = actions.ToArray();
                 statement.ElifExpressions = expr.ToArray();
             }
-            if(context.@else() != null)
+            if (context.elseStmt() != null)
             {
-                statement.ElseAction = Visit(context.@else().action());
+                statement.ElseAction = Visit(context.elseStmt().action());
             }
 
             return statement;
         }
 
         // Handling Literals: 
-        public override Node VisitFloat([NotNull] FlyLangParser.FloatContext context)
+        public override Node VisitFloatLit([NotNull] FlyLangParser.FloatLitContext context)
         {
             return Literal.From(float.Parse(context.GetText(), CultureInfo.InvariantCulture));
         }
-        public override Node VisitInt([NotNull] FlyLangParser.IntContext context)
+        public override Node VisitIntLit([NotNull] FlyLangParser.IntLitContext context)
         {
             return Literal.From(int.Parse(context.GetText()));
         }
@@ -146,6 +185,26 @@ namespace FlyLang
             var text = context.GetText();
             text = text.Substring(1, text.Length - 2);
             return Literal.From(text);
+        }
+        public override Node VisitArray([NotNull] FlyLangParser.ArrayContext context)
+        {
+            var items = new Node[context.expression().Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = Visit(context.expression(i));
+            }
+            return new ArrayNode(items);
+        }
+
+        public override Node VisitDictionary([NotNull] FlyLangParser.DictionaryContext context)
+        {
+            var items = new (Node, Node)[context.keyItem().Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                var key = context.keyItem(i);
+                items[i] = (Visit(key.key), Visit(key.value));
+            }
+            return new DictionaryNode(items);
         }
     }
 }

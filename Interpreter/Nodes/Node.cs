@@ -28,6 +28,8 @@ namespace FlyLang.Interpreter.Nodes
                 if (a.Arguments.ContainsKey(name))
                     return a.Arguments[name].Invoke(node);
             }
+            else if (Parent is ClassDefNode classDef)
+                return classDef.Locals[name].Invoke(classDef);
             if (ActionTree.Variables.ContainsKey(name))
                 return ActionTree.Variables[name];
             throw new Exception();

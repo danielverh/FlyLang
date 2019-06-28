@@ -1,17 +1,82 @@
 use base;
 
+print("What is your name");
+
+/*
+
+input = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
+pointer = 0;
+len = input.length();
+reg = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+i = 0;
+lastLoop = 0;
+while: i < len =>{
+	c = at(input, i);
+	if: c == "+" => {
+		reg[pointer] = reg[pointer] + 1;
+	}
+	elif: c == "-" => {
+		reg[pointer] = reg[pointer] - 1;
+	}
+	elif: c == ">" =>{
+		pointer++;
+	}
+	elif: c == "<" => {
+		pointer--;
+	}
+	elif: c == "[" => {
+		lastLoop = i;
+	}
+	elif: c == "]" => {
+		if: reg[pointer] != 0 =>{
+			i = lastLoop;
+		}
+	}
+	elif: c == "." =>{
+		a = reg[pointer];
+		printSingle(a.toAscii());
+	}
+	elif: c == "," =>{
+		one = inputOne();
+		reg[pointer] = one.asciiToInt();
+	}
+	i++;
+}
+
+
+class Hello {
+	name = "Test";
+	World () => {
+		print("Hello World");
+	};
+}
+
+hello = new Hello();
+
 // Define a method called 'echo'
 echo () => {
 	print(input());
 	return true;
-};
+}
 calc (x,y) => {
 	return x + y;
-};
+}
+
 // Variables and boolean statements:
 x = 1;
 y = 2;
 z = x + y;
+
+array = [1, 2, 3, 4];
+array2 = ["a", "b", "c"];
+
+array = array.take(3);
+
+dict = ["test": 1, "test2": 2];
+dict2 = [:];
+
+print(array[0]);
+
 if: z == (x + y) => {
 	print(z, " equals ", x, "+", y);
 }
@@ -26,10 +91,16 @@ else: => {
 i = 0;
 while: i < 10000 => {
 	sqrt(i);
-	i = i + 1;
+	i++;
 }
+
+for: item in [1, 2, 3] =>{
+	print(item);
+}
+
 // Run the user defined method.
 echo();
 print(calc(10, 20));
 // Read a line.
 input();
+*/

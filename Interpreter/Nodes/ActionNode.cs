@@ -7,14 +7,16 @@ namespace FlyLang.Interpreter.Nodes
     {
         public Dictionary<string, Node> Arguments = new Dictionary<string, Node>();
         public string[] ArgNames;
+        public Node Target { get; set; }
         public ActionNode(Node[] items)
         {
             AddRange(items);
         }
 
-        public dynamic Invoke(Node parent, Node[] args)
+        public dynamic Invoke(Node parent, Node[] args, Node target = null)
         {
             Parent = parent;
+            Target = target;
             return Invoke(args);
         }
         public dynamic Invoke(Node[] args)
@@ -30,6 +32,8 @@ namespace FlyLang.Interpreter.Nodes
         }
         public override dynamic Invoke()
         {
+            if (Target != null)
+                Arguments["self"] = Target.Invoke();
             if (Parent is ActionNode node)
                 foreach (var arg in node.Arguments)
                 {
@@ -41,12 +45,15 @@ namespace FlyLang.Interpreter.Nodes
                 // Implement return here
                 if (item is Return r)
                 {
+                    if (Parent == null)
+                        return r.Invoke(this);
                     return r;
-                    continue;
                 }
                 var result = item.Invoke(this);
                 if (result is Return r2)
                 {
+                    if (Parent == null)
+                        return r2.Invoke(this);
                     return r2;
                 }
 

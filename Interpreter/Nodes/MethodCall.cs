@@ -6,11 +6,14 @@ namespace FlyLang.Interpreter.Nodes
 {
     public class MethodCall : Node
     {
-        public MethodCall(string name, Node[] arguments)
+        public MethodCall(string name, Node[] arguments, Node target = null)
         {
             Name = name;
             Arguments = arguments;
+            Target = target;
+
         }
+        public Node Target { get; }
         public string Name { get; }
         public Node[] Arguments { get; }
         public override dynamic Invoke()
@@ -18,15 +21,17 @@ namespace FlyLang.Interpreter.Nodes
             // Look in libraries:
             if (Loader.Libraries["base"].ContainsKey(Name))
             {
-                object[] args = Arguments.Select(x => (object)x.Invoke(Parent)).ToArray();
-                if (!(args is object[]))
-                    args = new object[] { args };
+                dynamic[] args = Arguments.Select(x => (dynamic)x.Invoke(Parent)).ToArray();
+                if (!(args is dynamic[]))
+                    args = new dynamic[] { args };
+                if (Target != null)
+                    Loader.Self = Target.Invoke(Parent);
                 var result = Loader.Libraries["base"][Name].Invoke(args);
                 return result;
             }
             // Look in local:
             if (ActionTree.Actions.ContainsKey(Name))
-                return ActionTree.Actions[Name].Invoke(Parent, Arguments);
+                return ActionTree.Actions[Name].Invoke(Parent, Arguments, Target);
             throw new Exception("Method not found.");
         }
 
