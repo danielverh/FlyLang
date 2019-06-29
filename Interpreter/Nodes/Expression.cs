@@ -32,41 +32,32 @@ namespace FlyLang.Interpreter.Nodes
         {
             var leftValue = Left.Invoke(Parent);
             var rightValue = Right.Invoke(Parent);
-            if (Helper.IsNumeric(leftValue, rightValue))
+            switch (Operator)
             {
-                switch (Operator)
-                {
-                    case "+":
-                        return leftValue + rightValue;
-                    case "*":
-                        return leftValue * rightValue;
-                    case "-":
-                        return leftValue - rightValue;
-                    case "/":
-                        return leftValue / rightValue;
-                    case "==":
-                        return leftValue == rightValue;
-                    case "<=":
-                        return leftValue <= rightValue;
-                    case ">=":
-                        return leftValue >= rightValue;
-                    case "!=":
-                        return leftValue != rightValue;
-                    case ">":
-                        return leftValue > rightValue;
-                    case "<":
-                        return leftValue < rightValue;
-                    default:
-                        throw new Exception();
-                }
-            }
-            else if (leftValue is string && rightValue is string)
-            {
-                if (Operator == "+")
+                case "+":
                     return leftValue + rightValue;
-                else if (Operator == "==")
+                case "*":
+                    return leftValue * rightValue;
+                case "-":
+                    return leftValue - rightValue;
+                case "/":
+                    return leftValue / rightValue;
+                case "==":
                     return leftValue == rightValue;
+                case "<=":
+                    return leftValue <= rightValue;
+                case ">=":
+                    return leftValue >= rightValue;
+                case "!=":
+                    return leftValue != rightValue;
+                case ">":
+                    return leftValue > rightValue;
+                case "<":
+                    return leftValue < rightValue;
+                default:
+                    throw new Exception();
             }
+
             throw new Exception();
         }
     }

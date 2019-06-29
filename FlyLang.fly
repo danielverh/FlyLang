@@ -1,8 +1,64 @@
 use base;
 
-print("What is your name");
+i = 100000;
+a = 0;
+while: i > 0 => {
+	a = sqrt(i);
+	i--;
+}
+
+print("Done");
 
 /*
+
+printProcess()=>{
+	clear();
+	i = 0;
+	togo = 0;
+	while: i < length=>{
+		x = at(word,i);
+		if: guesses.contains(x) => {
+			printSingle(x);
+		}
+		else: =>{
+			printSingle("_");
+			togo ++;
+		}
+		i++;
+	}
+	if: togo == 0 => {
+		print("Gefeliciteerd, je hebt gewonnen!");
+		input();
+		return true;
+	}
+	print();
+	print("Nog ", trialsLeft, " pogingen over.");
+	print("Het woord is ", length, " tekens lang");
+}
+guesses = [];
+guess()=>{
+	g = input();
+	if: guesses.contains(g) => {
+	}
+	elif: word.contains(g) => {
+		guesses = guesses.push(g);
+	}
+	else: => {
+		trialsLeft--;
+		guesses = guesses.push(g);
+	}
+}
+trialsLeft = 8;
+print("Welkom bij Galgje!");
+hard = ["zuivel", "flater", "vrijuit", "cohesie", "opbouw", "verzenden", "vrezen", "honderd"];
+word = hard[randomInt(hard.length() - 1)];
+length = word.length();
+while: true =>{
+	printProcess();
+	guess();
+}
+input();
+
 
 input = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
 pointer = 0;

@@ -19,16 +19,21 @@ namespace FlyLang.Interpreter.Nodes
         public override dynamic Invoke()
         {
             // Look in libraries:
-            if (Loader.Libraries["base"].ContainsKey(Name))
+            foreach (var lib in Loader.Libraries)
             {
-                dynamic[] args = Arguments.Select(x => (dynamic)x.Invoke(Parent)).ToArray();
-                if (!(args is dynamic[]))
-                    args = new dynamic[] { args };
-                if (Target != null)
-                    Loader.Self = Target.Invoke(Parent);
-                var result = Loader.Libraries["base"][Name].Invoke(args);
-                return result;
+                foreach(dynamic m in lib.Value.Methods)
+                    if (m.Key == Name)
+                    {
+                        dynamic[] args = Arguments.Select(x => (dynamic)x.Invoke(Parent)).ToArray();
+                        if (!(args is dynamic[]))
+                            args = new dynamic[] { args };
+                        if (Target != null)
+                            Loader.Self = Target.Invoke(Parent);
+                        return m.Value.Run(args);
+                    }
+
             }
+
             // Look in local:
             if (ActionTree.Actions.ContainsKey(Name))
                 return ActionTree.Actions[Name].Invoke(Parent, Arguments, Target);

@@ -69,6 +69,29 @@ namespace FlyLang.Libraries
             var items = (object[])Loader.Self;
             return items.Take(i).ToArray();
         }
+
+        [PublicMethod("contains")]
+        public static bool Contains(object[] args)
+        {
+            if (Loader.Self is object[] items)
+                return items.Contains(args[0]);
+            return ((string)(Loader.Self)).Contains((string)args[0]);
+        }
+
+        [PublicMethod("clear")]
+        public static void ClearConsole(object[] args)
+        {
+            Console.Clear();
+        }
+        [PublicMethod("push")]
+        public static object[] Push(object[] args)
+        {
+            var arr = (object[])Loader.Self;
+            var final = new object[arr.Length + 1];
+            arr.CopyTo(final, 0);
+            final[arr.Length] = args[0];
+            return final;
+        }
         [PublicMethod("sqrt")]
         public static float Sqrt(object[] args) => (float)Math.Sqrt(Convert.ToSingle(args[0]));
     }

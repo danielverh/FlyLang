@@ -9,8 +9,8 @@ namespace FlyLang.Libraries
 {
     public class Loader
     {
-        public static Dictionary<string, Dictionary<string, Func<object[], dynamic>>> Libraries =
-            new Dictionary<string, Dictionary<string, Func<object[], dynamic>>>();
+        public static Dictionary<string, Library> Libraries =
+            new Dictionary<string, Library>();
         public static string[] LibraryNames;
         public static object Self { get; set; } = null;
         public Loader(UseStatement[] usings)
@@ -25,18 +25,35 @@ namespace FlyLang.Libraries
             {
                 if (usable.Contains(lib.Item2.Name.ToLower()))
                 {
+                    var library = new Library(lib.Item2.Name);
                     var methods = lib.Item1.GetMethods().Distinct();
-                    var d = new Dictionary<string, Func<object[], dynamic>>();
                     foreach (var method in methods)
                     {
                         var attr = method.GetCustomAttribute<PublicMethod>();
+                        var arguments = method.GetGenericArguments();
+                        var retType = method.ReturnType;
                         if (attr != null)
-                            d.Add(attr.Name, (o) =>
-                            {
-                                return method.Invoke(null, new object[] { o });
-                            });
+                        {
+                            Method m = null;
+                            if (retType == typeof(string))
+                                m = new Method<string>(method);
+                            else if (retType == typeof(int))
+                                m = new Method<int>(method);
+                            else if (retType == typeof(float))
+                                m = new Method<float>(method);
+                            else if (retType == typeof(bool))
+                                m = new Method<bool>(method);
+                            else if (retType == typeof(Dictionary<object, object>))
+                                m = new Method<Dictionary<object, object>>(method);
+                            else if (retType == typeof(object[]))
+                                m = new Method<object[]>(method);
+                            else if (retType == typeof(void))
+                                m = new Method<object>(method);
+                            m.Function = (args) => method.Invoke(null, new object[] { args });
+                            library.Methods.Add(attr.Name, m);
+                        }
                     }
-                    Libraries.Add(lib.Item2.Name.ToLower(), d);
+                    Libraries.Add(lib.Item2.Name, library);
                 }
             }
         }
